@@ -1,0 +1,31 @@
+import os
+
+print("--------------------------------------------==SteMapper==--------------------------------------------\n")
+print("Please input the octets of the IP you would like to scan:")
+
+#======================================================================#
+# Octets are input separately to allow for conversion into float type  #
+Octet1 = input("X.x.x.x  ") + "."                                      #
+Octet2 = input("x.X.x.x  ") + "."                                      #
+Octet3 = input("x.x.X.x  ") + "."                                      #
+Octet4 = input("x.x.x.X  ")                                            #
+                                                                       #
+# Conversion into float type for use in the linux command              #
+float(Octet1)                                                          #
+float(Octet2)                                                          #
+float(Octet3)                                                          #
+float(Octet4)                                                          #
+#======================================================================#
+
+
+# Concatenation of octects into IP address format
+IPaddress = Octet1 + Octet2 + Octet3 + Octet4
+
+# Verification of IP
+print(f"\nIP Address = {Octet1}{Octet2}{Octet3}{Octet4}\n")
+
+# Concatenation of linux command with input
+nmapCMD = "nmap " + format(IPaddress)
+
+# Display command concatenated above
+print(os.system(nmapCMD))
