@@ -1,0 +1,64 @@
+from email.mime import base
+import os
+import time
+from typing import Counter
+        
+
+#===========================================================================================#
+    ### 1. Set timeframe threshold & move files ###                                         #
+                                                                                            #
+def movefiles(sourcefolder, daysold):                                                       # Moves files in the folder which are older than "daysold" days
+    currenttime = time.time()                                                               # Get current time in seconds since the epoch (which is unix time)
+    cutofftime = currenttime - (daysold * 86400)                                            # Calculate the threshold time, those files will be put up for deletion (86400 secs = 1 day)
+                                                                                            #
+    archfolder = os.path.join(sourcefolder, "PyArchive")                                    #
+                                                                                            #
+    ### 2. Make sure folder exists ###                                                      #
+                                                                                            #
+    if not os.path.exists(sourcefolder):                                                    # If folder does not exist
+        print(f"Source folder not found: {sourcefolder}\n\n")                               # Make sure folder exists
+        return                                                                              #
+                                                                                            #
+    if not os.path.exists(archfolder):                                                      #
+        os.makedirs(archfolder)                                                             #
+                                                                                            #
+    movedamount = 0                                                                         # Variable for how many files are moved
+                                                                                            #
+    ### 3. Cycle through files in folder ###                                                #
+                                                                                            #
+    for filename in os.listdir(sourcefolder):                                               # For loop to go through each file in the folder
+        filepath = os.path.join(sourcefolder, filename)                                     #
+                                                                                            #
+    ### 5. make sure it's a file then get its last time modified ###                        #
+                                                                                            #
+        try:                                                                                #
+            if os.path.isfile(filepath):                                                    # Is it file?
+                filemodtime = os.path.getmtime(filepath)                                    # Get file meta data - Last modified
+                                                                                            #
+    ### 6. Move file if older than cut off time ###                                         #
+                                                                                            #
+                if filemodtime < cutofftime:                                                # If the cut-off time is greater than the modify time
+                    destpath = os.path.join(archfolder, filename)                           #
+                    base, ext = os.path.splitext(destpath)                                  #
+                    Counter = 1                                                             #
+                    while os.path.exists(destpath):                                         #
+                        destpath = f"{base}_{Counter}{ext}"                                 #
+                        counter += 1                                                        #
+                                                                                            #
+                    os.rename(filepath, destpath)                                           # move the file (filepath)
+                    print(f"Moved: {filepath} ==>> {destpath}\n\n")                         # Print, you know what this is
+                    movedamount += 1                                                        # Increment the list of moved files
+        except Exception as error:                                                          # Handle unexpected errors
+            print(f" X Error moving file: {filepath}")                                      #
+            print(f" Error details: {error}\n\n")                                           #
+                                                                                            #
+    print(f"done! {movedamount} files moved from '{sourcefolder}' to '{archfolder}'.\n\n")  # More print stuff
+#===========================================================================================#    
+
+##------------------config-----------------------##
+if __name__ == "__main__":
+    folder = "C:\\Users\\--insertusernamehere--\\Downloads"      # Folder to be cleaned up
+        
+    days = 90                                     # Days for use in deletion
+    
+    movefiles(folder, days)                       # The cleanup formula
