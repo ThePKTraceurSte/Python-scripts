@@ -1,0 +1,26 @@
+import os
+import random
+
+score = 0
+attempts = 0
+
+def main(number1, number2):
+    score = 0
+    attempts = 0
+
+    while attempts < 10:
+        number1 = random.randint(1,100)
+        number2 = random.randint(1,100)
+        if number1 >= number2:
+            print("good effort")
+            attempts += 1
+            score += 1
+            input(f"you scored {number1} over {number2} ready for next turn?")
+        else:
+            print("try again")
+            attempts += 1
+            input(f"you scored {number1} under {number2} ready for next turn?")
+    print(f"game over!!! you scored {score} in {attempts} attempts!")
+
+if __name__ == "__main__":
+    main("number1", "number2")
